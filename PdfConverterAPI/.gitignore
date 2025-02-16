@@ -1,0 +1,57 @@
+# Build e compilação
+bin/
+obj/
+out/
+*.exe
+*.dll
+*.pdb
+*.appx
+*.appxbundle
+*.msi
+*.nupkg
+*.snupkg
+
+# Configurações do Visual Studio
+.vs/
+*.user
+*.suo
+*.vcxproj*
+*.csproj.user
+*.dbmdl
+*.opendb
+
+# Dependências (NuGet e Node.js)
+packages/
+node_modules/
+project.lock.json
+project.assets.json
+# Para evitar que pacotes de terceiros sejam alterados
+.nuget/
+
+# Configurações locais de IDE
+.idea/
+*.sln.cache
+*.swp
+*.sln.docstates
+
+# Logs e arquivos temporários
+*.log
+*.tlog
+*.cache
+*.temp
+*.bak
+
+# Configurações sensíveis
+secrets.json
+.env
+appsettings.Development.json
+
+# Publicação
+publish/
+wwwroot/
+.DS_Store
+
+# Arquivos gerados por debug
+*.ilk
+*.map
+*.exp
