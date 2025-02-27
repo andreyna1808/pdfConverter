@@ -8,12 +8,10 @@ namespace PdfConverterAPI.Controllers
     public class ConverterController : ControllerBase
     {
         private readonly JpgToPdfService _jpgToPdfService;
-        private readonly WordToPdfService _wordToPdfService;
 
         public ConverterController()
         {
             _jpgToPdfService = new JpgToPdfService();
-            _wordToPdfService = new WordToPdfService();
         }
 
         [HttpPost("img-to-pdf")]
