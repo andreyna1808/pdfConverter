@@ -12,6 +12,7 @@ namespace PdfConverterAPI.Controllers
         private readonly CompressPdfService _compressPdfService;
         private readonly PdfToJpgService _pdfToJpgService;
         private readonly PdfToWordService _pdfToWordService;
+        private readonly WordToPdfService _wordToPdfService;
 
         public PdfController()
         {
@@ -20,6 +21,7 @@ namespace PdfConverterAPI.Controllers
             _compressPdfService = new CompressPdfService();
             _pdfToJpgService = new PdfToJpgService();
             _pdfToWordService = new PdfToWordService();
+            _wordToPdfService = new WordToPdfService();
         }
 
         [HttpPost("merge")]
