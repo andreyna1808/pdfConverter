@@ -42,7 +42,6 @@ namespace PdfConverterAPI.Services
                     Name = match.Groups[request.Values[1]].Value.Trim(),
                 };
 
-                // Preenche dinamicamente os valores
                 foreach (var value in request.Values.Skip(2))
                 {
                     if (
@@ -82,30 +81,77 @@ namespace PdfConverterAPI.Services
                     && candidate.TotalScore
                         < (request.ElimitedByPercent.Value / 100.0 * request.FullScore);
 
+                if (eliminatedByZero)
+                {
+                    candidate.Status = "Eliminado por zerar algum conteúdo";
+                }
+                else if (eliminatedByPercent)
+                {
+                    candidate.Status =
+                        $"Eliminado por tirar abaixo de {request.ElimitedByPercent}%";
+                }
+                else
+                {
+                    candidate.Status = "Classificado";
+                }
+
                 candidate.IsEliminated = eliminatedByZero || eliminatedByPercent;
-                candidate.Status = candidate.IsEliminated ? "Eliminado" : "Classificado";
             }
 
             var rankedCandidates = candidates
                 .OrderBy(c => c.IsEliminated)
                 .ThenByDescending(c => c.TotalScore);
 
-            // Verifica se há critério de desempate antes de ordená-lo
             if (request.TiebreakerCriterion != null && request.TiebreakerCriterion.Any())
             {
-                rankedCandidates = rankedCandidates.ThenBy(c =>
-                    request
-                        .TiebreakerCriterion.OrderBy(tc => tc.Key)
-                        .Select(tc => c.Scores.ContainsKey(tc.Value) ? c.Scores[tc.Value] : 0)
-                        .Aggregate((a, b) => a + b) // Soma os valores para gerar um único número
-                );
+                foreach (var criterion in request.TiebreakerCriterion.OrderBy(tc => tc.Key))
+                {
+                    rankedCandidates = rankedCandidates.ThenByDescending(c =>
+                        c.Scores.ContainsKey(criterion.Value) ? c.Scores[criterion.Value] : 0
+                    );
+                }
             }
 
             var finalRanking = rankedCandidates.ToList();
 
             for (int i = 0; i < finalRanking.Count; i++)
             {
-                finalRanking[i].Position = finalRanking[i].IsEliminated ? -1 : i + 1;
+                var currentCandidate = finalRanking[i];
+                currentCandidate.Position = currentCandidate.IsEliminated ? -1 : i + 1;
+
+                if (i > 0)
+                {
+                    var previousCandidate = finalRanking[i - 1];
+
+                    bool isTied =
+                        !currentCandidate.IsEliminated
+                        && !previousCandidate.IsEliminated
+                        && currentCandidate.TotalScore == previousCandidate.TotalScore;
+
+                    foreach (var criterion in request.TiebreakerCriterion.OrderBy(tc => tc.Key))
+                    {
+                        double currentValue = currentCandidate.Scores.ContainsKey(criterion.Value)
+                            ? currentCandidate.Scores[criterion.Value]
+                            : 0;
+                        double previousValue = previousCandidate.Scores.ContainsKey(criterion.Value)
+                            ? previousCandidate.Scores[criterion.Value]
+                            : 0;
+
+                        if (currentValue != previousValue)
+                        {
+                            isTied = false;
+                            break;
+                        }
+                    }
+
+                    if (isTied)
+                    {
+                        currentCandidate.Status =
+                            "Classificado: Aguardar outro critério de desempate para prova de título";
+                        previousCandidate.Status =
+                            "Classificado: Aguardar outro critério de desempate para prova de título";
+                    }
+                }
             }
 
             return finalRanking;
