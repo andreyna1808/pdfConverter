@@ -1,164 +1,123 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas.Parser;
-using Microsoft.AspNetCore.Http;
+using PdfConverterAPI.Models;
 
 namespace PdfConverterAPI.Services
 {
     public class ClassificationService
     {
-        public static List<Candidate> candidates = new List<Candidate>();
-
-        public async Task<List<Candidate>> ProcessFiles(IFormFile[] files)
+        public async Task<List<CandidateDataModel>> ProcessFiles(
+            IEnumerable<IFormFile> files,
+            ClassificationCriteriaModel request
+        )
         {
-            candidates.Clear();
+            var candidates = new List<CandidateDataModel>();
 
             foreach (var file in files)
             {
                 using var stream = file.OpenReadStream();
-                var text = ReadPdfText(stream);
-                ProcessCandidate(text);
+                var text = ExtractionService.ReadPdfText(stream);
+                ProcessCandidate(text, request, candidates);
+            }
+
+            return RankCandidates(candidates, request);
+        }
+
+        private void ProcessCandidate(
+            string text,
+            ClassificationCriteriaModel request,
+            List<CandidateDataModel> candidates
+        )
+        {
+            var candidateMatches = Regex.Matches(
+                text,
+                GetRegexPattern(request.Values),
+                RegexOptions.Multiline
+            );
+
+            foreach (Match match in candidateMatches)
+            {
+                var candidate = new CandidateDataModel
+                {
+                    RegistrationNumber = match.Groups[request.Values[0]].Value.Trim(),
+                    Name = match.Groups[request.Values[1]].Value.Trim(),
+                };
+
+                // Preenche dinamicamente os valores
+                foreach (var value in request.Values.Skip(2))
+                {
+                    if (
+                        double.TryParse(
+                            match.Groups[value].Value.Replace(",", "."),
+                            out double result
+                        )
+                    )
+                    {
+                        candidate.Scores[value] = result;
+                    }
+                }
+
+                candidates.Add(candidate);
+            }
+        }
+
+        private List<CandidateDataModel> RankCandidates(
+            List<CandidateDataModel> candidates,
+            ClassificationCriteriaModel request
+        )
+        {
+            foreach (var candidate in candidates)
+            {
+                var totalScore = candidate.Scores.ContainsKey(request.BasisAssessment)
+                    ? candidate.Scores[request.BasisAssessment]
+                    : 0;
+                candidate.TotalScore = totalScore;
+
+                bool eliminatedByZero =
+                    request.EliminatedByZero.HasValue
+                    && request.EliminatedByZero.Value
+                    && candidate.Scores.Any(s => s.Value == 0);
+
+                bool eliminatedByPercent =
+                    request.ElimitedByPercent.HasValue
+                    && candidate.TotalScore
+                        < (request.ElimitedByPercent.Value / 100.0 * request.FullScore);
+
+                candidate.IsEliminated = eliminatedByZero || eliminatedByPercent;
+                candidate.Status = candidate.IsEliminated ? "Eliminado" : "Classificado";
             }
 
             var rankedCandidates = candidates
                 .OrderBy(c => c.IsEliminated)
-                .ThenByDescending(c => c.TotalScore)
-                .ThenByDescending(c => c.CEPE)
-                .ThenByDescending(c => c.LPFS)
-                .Select(
-                    (c, index) =>
-                    {
-                        if (c.IsEliminated)
-                        {
-                            c.Position = -1;
-                            c.Status = "Eliminado por ter zerado ou estar abaixo dos 25 pontos";
-                        }
-                        else
-                        {
-                            c.Position = index + 1;
-                            c.Status = "Classificado";
-                        }
+                .ThenByDescending(c => c.TotalScore);
 
-                        return c;
-                    }
-                )
-                .ToList();
-
-            for (int i = 1; i < rankedCandidates.Count; i++)
+            // Verifica se há critério de desempate antes de ordená-lo
+            if (request.TiebreakerCriterion != null && request.TiebreakerCriterion.Any())
             {
-                var prev = rankedCandidates[i - 1];
-                var curr = rankedCandidates[i];
-
-                if (
-                    !curr.IsEliminated
-                    && prev.TotalScore == curr.TotalScore
-                    && prev.CEPE == curr.CEPE
-                    && prev.LPFS == curr.LPFS
-                )
-                {
-                    curr.Status = "Aguardar prova de título";
-                    prev.Status = "Aguardar prova de título";
-                }
+                rankedCandidates = rankedCandidates.ThenBy(c =>
+                    request
+                        .TiebreakerCriterion.OrderBy(tc => tc.Key)
+                        .Select(tc => c.Scores.ContainsKey(tc.Value) ? c.Scores[tc.Value] : 0)
+                        .Aggregate((a, b) => a + b) // Soma os valores para gerar um único número
+                );
             }
 
-            return rankedCandidates;
+            var finalRanking = rankedCandidates.ToList();
+
+            for (int i = 0; i < finalRanking.Count; i++)
+            {
+                finalRanking[i].Position = finalRanking[i].IsEliminated ? -1 : i + 1;
+            }
+
+            return finalRanking;
         }
 
-        public string ReadPdfText(Stream stream)
+        private string GetRegexPattern(List<string> values)
         {
-            using var pdfReader = new PdfReader(stream);
-            using var pdfDoc = new PdfDocument(pdfReader);
-            string text = "";
-            for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
-            {
-                text += PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(i));
-            }
-            return text;
-        }
-
-        public void ProcessCandidate(string text)
-        {
-            Console.WriteLine("======================================");
-            Console.WriteLine("Texto extraído do PDF:\n" + text);
-
-            var candidateMatches = Regex.Matches(
-                text,
-                @"(?<Registration>\d{9})\s+(?<Name>[A-ZÀ-Ú ]+)\s+(?<LPFS>\d+,\d+|\d+\.\d+|\d+)\s+(?<RLFS>\d+,\d+|\d+\.\d+|\d+)\s+(?<NIFS>\d+,\d+|\d+\.\d+|\d+)\s+(?<CEAS>\d+,\d+|\d+\.\d+|\d+)\s+(?<Score>\d+,\d+|\d+\.\d+|\d+)",
-                RegexOptions.Multiline
-            );
-
-            if (candidateMatches.Count == 0)
-            {
-                Console.WriteLine("⚠️ Nenhum candidato encontrado!");
-                return;
-            }
-
-            foreach (Match match in candidateMatches)
-            {
-                string registrationNumber = match.Groups["Registration"].Value.Trim();
-                string name = match.Groups["Name"].Value.Trim();
-                double lpfs = double.Parse(match.Groups["LPFS"].Value.Replace(",", "."));
-                double rlfs = double.Parse(match.Groups["RLFS"].Value.Replace(",", "."));
-                double cped = double.Parse(match.Groups["NIFS"].Value.Replace(",", "."));
-                double cepe = double.Parse(match.Groups["CEAS"].Value.Replace(",", "."));
-                double score = double.Parse(match.Groups["Score"].Value.Replace(",", "."));
-
-                Console.WriteLine(
-                    $"✅ Processando: {name} | Inscrição: {registrationNumber} | Nota: {score} | CEPE: {cepe} | LPFS: {lpfs}"
+            return $@"(?<{values[0]}>[\d]+)\s+(?<{values[1]}>[A-ZÀ-Ú ]+)\s+"
+                + string.Join(
+                    @"\s+",
+                    values.Skip(2).Select(v => $"(?<{v}>\\d+,\\d+|\\d+\\.\\d+|\\d+)")
                 );
-
-                bool eliminado = (lpfs == 0 || rlfs == 0 || cped == 0 || cepe == 0 || score < 2500);
-
-                var candidate = candidates.FirstOrDefault(c =>
-                    c.RegistrationNumber == registrationNumber
-                );
-                if (candidate != null)
-                {
-                    candidate.TotalScore += score;
-                    candidate.CEPE = cepe;
-                    candidate.LPFS = lpfs;
-                    candidate.IsEliminated = eliminado;
-                }
-                else
-                {
-                    candidates.Add(
-                        new Candidate
-                        {
-                            Name = name,
-                            RegistrationNumber = registrationNumber,
-                            TotalScore = score,
-                            LPFS = lpfs,
-                            RLFS = rlfs,
-                            CPED = cped,
-                            CEPE = cepe,
-                            IsEliminated = eliminado,
-                        }
-                    );
-                }
-            }
-
-            Console.WriteLine($"✅ Total de candidatos processados: {candidates.Count}");
         }
     }
-}
-
-public class Candidate
-{
-    public string Name { get; set; }
-    public string RegistrationNumber { get; set; }
-    public double TotalScore { get; set; }
-    public int Position { get; set; }
-
-    public double LPFS { get; set; } = 0;
-    public double RLFS { get; set; } = 0;
-    public double CPED { get; set; } = 0;
-    public double CEPE { get; set; } = 0;
-
-    public bool IsEliminated { get; set; } = false;
-    public string Status { get; set; } = "Classificado";
 }
