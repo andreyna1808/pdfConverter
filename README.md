@@ -8,3 +8,4 @@ Website for online PDF conversion - OpenSource
 - PDF to WORD – Converter um PDF para documento editável do Word.
 - JPG to PDF – Converter imagens JPG para PDF.
 - Formatar word padrão ABNT.
+- PDF de classificação
