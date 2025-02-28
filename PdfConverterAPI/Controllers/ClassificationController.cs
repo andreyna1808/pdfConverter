@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PdfConverterAPI.Models;
 using PdfConverterAPI.Services;
 
 namespace PdfConverterAPI.Controllers
@@ -11,19 +9,47 @@ namespace PdfConverterAPI.Controllers
     public class ClassificationController : ControllerBase
     {
         private readonly ClassificationService _classificationService;
+        private readonly ExtractionService _extractionService;
 
-        public ClassificationController(ClassificationService classificationService)
+        public ClassificationController(
+            ClassificationService classificationService,
+            ExtractionService extractionService
+        )
         {
             _classificationService = classificationService;
+            _extractionService = extractionService;
+        }
+
+        [HttpPost("extract-data")]
+        public async Task<IActionResult> ExtractData([FromForm] List<IFormFile> files)
+        {
+            if (files == null || files.Count == 0)
+                return BadRequest("Envie pelo menos um arquivo PDF.");
+
+            var extractedData = await _extractionService.ProcessFiles(files);
+            return Ok(extractedData);
         }
 
         [HttpPost("get-result")]
-        public async Task<IActionResult> UploadPdf([FromForm] IFormFile[] files)
+        public async Task<IActionResult> UploadPdf(
+            [FromForm] IFormFile[] files,
+            [FromForm] string requestJson
+        )
         {
-            if (files.Length == 0 || files.Length > 2)
-                return BadRequest("Envie um ou dois arquivos PDF.");
+            if (files.Length == 0)
+                return BadRequest("Envie pelo menos um arquivo PDF.");
 
-            var classification = await _classificationService.ProcessFiles(files);
+            if (string.IsNullOrEmpty(requestJson))
+                return BadRequest("Os critérios de classificação são obrigatórios.");
+
+            var request = System.Text.Json.JsonSerializer.Deserialize<ClassificationCriteriaModel>(
+                requestJson
+            );
+
+            if (request == null)
+                return BadRequest("Erro ao interpretar os critérios de classificação.");
+
+            var classification = await _classificationService.ProcessFiles(files, request);
             return Ok(classification);
         }
     }
