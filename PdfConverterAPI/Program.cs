@@ -13,6 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<WordFormattingService>();
+builder.Services.AddScoped<ExtractionService>();
 builder.Services.AddScoped<ClassificationService>();
 
 var app = builder.Build();
