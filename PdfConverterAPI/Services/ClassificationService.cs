@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using PdfConverterAPI.Models;
 
@@ -16,47 +18,126 @@ namespace PdfConverterAPI.Services
             {
                 using var stream = file.OpenReadStream();
                 var text = ExtractionService.ReadPdfText(stream);
-                ProcessCandidate(text, request, candidates);
+
+                string[] pages = Regex.Split(text, @"Página \d+ de \d+");
+
+                foreach (var page in pages)
+                {
+                    Console.WriteLine("🔍 Verificando nova página...");
+
+                    string header = page.Substring(0, Math.Min(300, page.Length));
+
+                    string normalizedHeader = NormalizeText(header);
+                    string normalizedProfession = NormalizeText(request.Profession);
+
+                    Console.WriteLine($"📌 Cabeçalho normalizado: {normalizedHeader}");
+                    Console.WriteLine($"📌 Profissão normalizada: {normalizedProfession}");
+
+                    if (!normalizedHeader.Contains(normalizedProfession))
+                    {
+                        Console.WriteLine(
+                            $"⏩ Pulando página, profissão '{request.Profession}' não encontrada no cabeçalho."
+                        );
+                        continue;
+                    }
+
+                    Console.WriteLine(
+                        $"📄 Processando página para a profissão: {request.Profession}"
+                    );
+
+                    List<string> detectedHeaders = DetectHeaders(page, request.Values);
+                    if (!detectedHeaders.Any())
+                    {
+                        Console.WriteLine("⚠ Nenhum cabeçalho válido foi detectado.");
+                        continue;
+                    }
+
+                    string regexPattern = GetRegexPattern(detectedHeaders);
+
+                    ProcessCandidate(
+                        page,
+                        regexPattern,
+                        detectedHeaders,
+                        candidates,
+                        request.FullScore
+                    );
+                }
             }
 
             return RankCandidates(candidates, request);
         }
 
+        private List<string> DetectHeaders(string text, List<string> expectedValues)
+        {
+            string[] lines = text.Split('\n');
+            Console.WriteLine("📌 Analisando linhas da página...");
+
+            foreach (string line in lines)
+            {
+                Console.WriteLine("Linha: " + line);
+            }
+
+            List<string> headers = new();
+
+            foreach (string line in lines)
+            {
+                if (expectedValues.All(v => line.Contains(v, StringComparison.OrdinalIgnoreCase)))
+                {
+                    headers = expectedValues;
+                    break;
+                }
+            }
+
+            Console.WriteLine("✔ Cabeçalhos finais detectados: " + string.Join(" | ", headers));
+            return headers;
+        }
+
         private void ProcessCandidate(
             string text,
-            ClassificationCriteriaModel request,
-            List<CandidateDataModel> candidates
+            string regexPattern,
+            List<string> headers,
+            List<CandidateDataModel> candidates,
+            double fullScore
         )
         {
-            var candidateMatches = Regex.Matches(
-                text,
-                GetRegexPattern(request.Values),
-                RegexOptions.Multiline
-            );
+            var candidateMatches = Regex.Matches(text, regexPattern, RegexOptions.Multiline);
+
+            if (candidateMatches.Count == 0)
+            {
+                Console.WriteLine("⚠ Nenhum candidato encontrado nesta página.");
+                return;
+            }
 
             foreach (Match match in candidateMatches)
             {
                 var candidate = new CandidateDataModel
                 {
-                    RegistrationNumber = match.Groups[request.Values[0]].Value.Trim(),
-                    Name = match.Groups[request.Values[1]].Value.Trim(),
+                    RegistrationNumber = match.Groups[headers[0]].Value.Trim(),
+                    Name = match.Groups[headers[1]].Value.Trim(),
+                    Scores = new Dictionary<string, double>(),
                 };
 
-                foreach (var value in request.Values.Skip(2))
+                foreach (var header in headers.Skip(2))
                 {
                     if (
                         double.TryParse(
-                            match.Groups[value].Value.Replace(",", "."),
+                            match.Groups[header].Value.Replace(",", "."),
                             out double result
                         )
                     )
                     {
-                        candidate.Scores[value] = result;
+                        if (result > fullScore)
+                        {
+                            result /= 100;
+                        }
+                        candidate.Scores[header] = result;
                     }
                 }
 
                 candidates.Add(candidate);
             }
+
+            Console.WriteLine($"✔ Candidatos processados nesta página: {candidates.Count}");
         }
 
         private List<CandidateDataModel> RankCandidates(
@@ -157,13 +238,40 @@ namespace PdfConverterAPI.Services
             return finalRanking;
         }
 
-        private string GetRegexPattern(List<string> values)
+        private string GetRegexPattern(List<string> headers)
         {
-            return $@"(?<{values[0]}>[\d]+)\s+(?<{values[1]}>[A-ZÀ-Ú ]+)\s+"
+            var sanitizedHeaders = headers.Select(h => SanitizeGroupName(h)).ToList();
+
+            return $@"(?<{sanitizedHeaders[0]}>[\d]+)\s+(?<{sanitizedHeaders[1]}>[A-ZÀ-Úa-zçãõ ]+)\s+"
                 + string.Join(
                     @"\s+",
-                    values.Skip(2).Select(v => $"(?<{v}>\\d+,\\d+|\\d+\\.\\d+|\\d+)")
+                    sanitizedHeaders.Skip(2).Select(h => $"(?<{h}>\\d+,\\d+|\\d+\\.\\d+|\\d+)")
                 );
+        }
+
+        private string SanitizeGroupName(string name)
+        {
+            return Regex.Replace(name, @"\s+", "_");
+        }
+
+        private string NormalizeText(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return "";
+
+            text = text.Normalize(NormalizationForm.FormD);
+            text = new string(
+                text.Where(c =>
+                        CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark
+                    )
+                    .ToArray()
+            );
+
+            text = Regex.Replace(text, @"[^a-zA-Z0-9]", " ").ToLower().Trim();
+
+            text = Regex.Replace(text, @"\s+", " ");
+
+            return text;
         }
     }
 }
