@@ -23,32 +23,19 @@ namespace PdfConverterAPI.Services
 
                 foreach (var page in pages)
                 {
-                    Console.WriteLine("🔍 Verificando nova página...");
-
                     string header = page.Substring(0, Math.Min(300, page.Length));
 
                     string normalizedHeader = NormalizeText(header);
                     string normalizedProfession = NormalizeText(request.Profession);
 
-                    Console.WriteLine($"📌 Cabeçalho normalizado: {normalizedHeader}");
-                    Console.WriteLine($"📌 Profissão normalizada: {normalizedProfession}");
-
                     if (!normalizedHeader.Contains(normalizedProfession))
                     {
-                        Console.WriteLine(
-                            $"⏩ Pulando página, profissão '{request.Profession}' não encontrada no cabeçalho."
-                        );
                         continue;
                     }
-
-                    Console.WriteLine(
-                        $"📄 Processando página para a profissão: {request.Profession}"
-                    );
 
                     List<string> detectedHeaders = DetectHeaders(page, request.Values);
                     if (!detectedHeaders.Any())
                     {
-                        Console.WriteLine("⚠ Nenhum cabeçalho válido foi detectado.");
                         continue;
                     }
 
@@ -70,12 +57,6 @@ namespace PdfConverterAPI.Services
         private List<string> DetectHeaders(string text, List<string> expectedValues)
         {
             string[] lines = text.Split('\n');
-            Console.WriteLine("📌 Analisando linhas da página...");
-
-            foreach (string line in lines)
-            {
-                Console.WriteLine("Linha: " + line);
-            }
 
             List<string> headers = new();
 
@@ -88,7 +69,6 @@ namespace PdfConverterAPI.Services
                 }
             }
 
-            Console.WriteLine("✔ Cabeçalhos finais detectados: " + string.Join(" | ", headers));
             return headers;
         }
 
@@ -104,7 +84,6 @@ namespace PdfConverterAPI.Services
 
             if (candidateMatches.Count == 0)
             {
-                Console.WriteLine("⚠ Nenhum candidato encontrado nesta página.");
                 return;
             }
 
@@ -136,8 +115,6 @@ namespace PdfConverterAPI.Services
 
                 candidates.Add(candidate);
             }
-
-            Console.WriteLine($"✔ Candidatos processados nesta página: {candidates.Count}");
         }
 
         private List<CandidateDataModel> RankCandidates(
