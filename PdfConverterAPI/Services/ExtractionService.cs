@@ -7,17 +7,14 @@ namespace PdfConverterAPI.Services
 {
     public class ExtractionService
     {
-        public async Task<List<ProfessionDataModel>> ProcessFiles(IEnumerable<IFormFile> files)
+        public async Task<List<ProfessionDataModel>> ProcessFiles(IFormFile file)
         {
             var professions = new List<ProfessionDataModel>();
             var existingProfessions = new HashSet<string>();
 
-            foreach (var file in files)
-            {
-                using var stream = file.OpenReadStream();
-                var text = ReadPdfText(stream);
-                ExtractProfessions(text, professions, existingProfessions);
-            }
+            using var stream = file.OpenReadStream();
+            var text = ReadPdfText(stream);
+            ExtractProfessions(text, professions, existingProfessions);
 
             return professions;
         }

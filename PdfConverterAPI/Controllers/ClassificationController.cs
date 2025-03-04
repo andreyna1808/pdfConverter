@@ -21,10 +21,10 @@ namespace PdfConverterAPI.Controllers
         }
 
         [HttpPost("extract-data")]
-        public async Task<IActionResult> ExtractData([FromForm] List<IFormFile> files)
+        public async Task<IActionResult> ExtractData([FromForm] IFormFile files)
         {
-            if (files == null || files.Count == 0)
-                return BadRequest("Envie pelo menos um arquivo PDF.");
+            if (files == null)
+                return BadRequest("É necessário enviar um arquivo PDF.");
 
             var extractedData = await _extractionService.ProcessFiles(files);
             return Ok(extractedData);
@@ -32,12 +32,14 @@ namespace PdfConverterAPI.Controllers
 
         [HttpPost("get-result")]
         public async Task<IActionResult> UploadPdf(
-            [FromForm] IFormFile[] files,
+            [FromForm] IFormFile files,
             [FromForm] string requestJson
         )
         {
-            if (files.Length == 0)
-                return BadRequest("Envie pelo menos um arquivo PDF.");
+            if (files == null)
+            {
+                return BadRequest("Envie pelo menos UM arquivo PDF.");
+            }
 
             if (string.IsNullOrEmpty(requestJson))
                 return BadRequest("Os critérios de classificação são obrigatórios.");

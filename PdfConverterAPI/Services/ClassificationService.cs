@@ -8,47 +8,47 @@ namespace PdfConverterAPI.Services
     public class ClassificationService
     {
         public async Task<List<CandidateDataModel>> ProcessFiles(
-            IEnumerable<IFormFile> files,
+            IFormFile file,
             ClassificationCriteriaModel request
         )
         {
             var candidates = new List<CandidateDataModel>();
 
-            foreach (var file in files)
+            using var stream = file.OpenReadStream();
+            var text = ExtractionService.ReadPdfText(stream);
+
+            string[] pages = Regex.Split(text, @"Página \d+ de \d+");
+
+            foreach (var page in pages)
             {
-                using var stream = file.OpenReadStream();
-                var text = ExtractionService.ReadPdfText(stream);
+                string header = page.Substring(0, Math.Min(300, page.Length));
 
-                string[] pages = Regex.Split(text, @"Página \d+ de \d+");
+                string normalizedHeader = NormalizeText(header);
+                string normalizedProfession = NormalizeText(request.Profession);
 
-                foreach (var page in pages)
+                Console.WriteLine("normalizedHeader", normalizedHeader);
+                Console.WriteLine("normalizedProfession", normalizedProfession);
+
+                if (!normalizedHeader.Contains(normalizedProfession))
                 {
-                    string header = page.Substring(0, Math.Min(300, page.Length));
-
-                    string normalizedHeader = NormalizeText(header);
-                    string normalizedProfession = NormalizeText(request.Profession);
-
-                    if (!normalizedHeader.Contains(normalizedProfession))
-                    {
-                        continue;
-                    }
-
-                    List<string> detectedHeaders = DetectHeaders(page, request.Values);
-                    if (!detectedHeaders.Any())
-                    {
-                        continue;
-                    }
-
-                    string regexPattern = GetRegexPattern(detectedHeaders);
-
-                    ProcessCandidate(
-                        page,
-                        regexPattern,
-                        detectedHeaders,
-                        candidates,
-                        request.FullScore
-                    );
+                    continue;
                 }
+
+                List<string> detectedHeaders = DetectHeaders(page, request.Values);
+                if (!detectedHeaders.Any())
+                {
+                    continue;
+                }
+
+                string regexPattern = GetRegexPattern(detectedHeaders);
+
+                ProcessCandidate(
+                    page,
+                    regexPattern,
+                    detectedHeaders,
+                    candidates,
+                    request.FullScore
+                );
             }
 
             return RankCandidates(candidates, request);
@@ -186,19 +186,26 @@ namespace PdfConverterAPI.Services
                         && !previousCandidate.IsEliminated
                         && currentCandidate.TotalScore == previousCandidate.TotalScore;
 
-                    foreach (var criterion in request.TiebreakerCriterion.OrderBy(tc => tc.Key))
+                    if (request.TiebreakerCriterion != null && request.TiebreakerCriterion.Any())
                     {
-                        double currentValue = currentCandidate.Scores.ContainsKey(criterion.Value)
-                            ? currentCandidate.Scores[criterion.Value]
-                            : 0;
-                        double previousValue = previousCandidate.Scores.ContainsKey(criterion.Value)
-                            ? previousCandidate.Scores[criterion.Value]
-                            : 0;
-
-                        if (currentValue != previousValue)
+                        foreach (var criterion in request.TiebreakerCriterion.OrderBy(tc => tc.Key))
                         {
-                            isTied = false;
-                            break;
+                            double currentValue = currentCandidate.Scores.ContainsKey(
+                                criterion.Value
+                            )
+                                ? currentCandidate.Scores[criterion.Value]
+                                : 0;
+                            double previousValue = previousCandidate.Scores.ContainsKey(
+                                criterion.Value
+                            )
+                                ? previousCandidate.Scores[criterion.Value]
+                                : 0;
+
+                            if (currentValue != previousValue)
+                            {
+                                isTied = false;
+                                break;
+                            }
                         }
                     }
 
