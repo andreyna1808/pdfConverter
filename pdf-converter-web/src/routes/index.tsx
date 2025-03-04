@@ -1,19 +1,11 @@
-import { Route, Routes, Outlet } from "react-router-dom";
-import Navbar from "../components/NavBar";
+import { Route, Routes } from "react-router-dom";
+import About from "../pages/about";
 
-function Layout() {
-  return (
-    <>
-      <Navbar />
-      <Outlet />
-    </>
-  );
-}
-
-export function Router() {
+export const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}></Route>
+      {/* <Route path="/" element={<Layout />}></Route> */}
+      <Route path="/about" element={<About />}></Route>
     </Routes>
   );
-}
+};
