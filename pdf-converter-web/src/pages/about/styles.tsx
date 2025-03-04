@@ -66,10 +66,6 @@ export const Button = styled.a`
   font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.lightPurple};
-  }
 `;
 
 export const ContactEmail = styled.p`
