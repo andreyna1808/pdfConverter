@@ -16,7 +16,8 @@ import {
   IDataInfo,
   ITypeRequest,
 } from "../../interfaces/IConverters";
-import { Validation } from "./validation";
+import { formatDocToSend, hasErrorMsg } from "./validations";
+import { ConverterService } from "../../services/converters";
 
 const Converters = () => {
   const [selectedFiles, setSelectedFiles] = useState<any>(null);
@@ -55,15 +56,19 @@ const Converters = () => {
   };
 
   const handleConverter = async (dataInformation: IDataInfo) => {
-    const errorMsg = Validation(dataInformation);
+    const errorMsg = hasErrorMsg(dataInformation);
 
     if (errorMsg) {
       return showErrorToast(errorMsg);
     }
 
-    console.log("errorMsg: ", errorMsg);
+    const formData = formatDocToSend(dataInformation);
+    const sendDoc = await ConverterService(formData, dataInformation);
 
-    showSuccessToast(errorMsg);
+    // console.log("dataInformation: ", { dataInformation, formData, sendDoc });
+
+    return sendDoc;
+    // showSuccessToast('Dale');
   };
 
   return (
