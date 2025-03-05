@@ -45,12 +45,18 @@ const Converters = () => {
       }
       return prev;
     });
+
+    event.target.value = null;
   };
 
   const handleRemoveFile = (index: number) => {
     setSelectedFiles((prev: any) => {
       const updatedFiles =
         prev?.file?.filter((_: any, idx: number) => idx !== index) || [];
+
+      if (!updatedFiles.length) {
+        return { ...prev, file: [] };
+      }
       return { ...prev, file: updatedFiles };
     });
   };
@@ -105,10 +111,7 @@ const Converters = () => {
                     <Elements.FileName>
                       {selectedFiles?.["file"]?.[0]?.name}
                     </Elements.FileName>
-                    <CloseIcon
-                      size={22}
-                      onClick={() => setSelectedFiles(null)} // TODO mesmo limpando o arquivo quando exclui ele não permite selecionar o mesmo
-                    />
+                    <CloseIcon size={22} onClick={() => handleRemoveFile(0)} />
                   </Elements.DivFiles>
                 )}
 
