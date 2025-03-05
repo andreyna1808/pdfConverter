@@ -5,6 +5,7 @@ export const theme = {
     background: "#2d2d2e",
     white: "#f7fafc",
     lightPurple: "#8888f3",
+    darkPurple: "#5d5da0",
   },
   fonts: {
     body: "'Inter', sans-serif",

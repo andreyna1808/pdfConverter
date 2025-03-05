@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import About from "../pages/about";
 import Home from "../pages/home";
-import Converters from "../components/converters";
+import Converters from "../components/Converters";
 
 export const Router = () => {
   return (
