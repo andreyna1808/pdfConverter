@@ -11,10 +11,10 @@ export const getFormatRequest = (value: string) => {
     case "pdf/merge":
       return { body: ["files"], type: ".pdf" };
     case "pdf/remove-pages":
-      return { body: ["file", "pages"], type: ".pdf" };
+      return { body: ["pages", "file"], type: ".pdf" };
     case "classification/get-result":
       return { body: ["file", "requestJson"], type: ".pdf" };
     default:
-      return {};
+      return { body: null, type: "" };
   }
 };
