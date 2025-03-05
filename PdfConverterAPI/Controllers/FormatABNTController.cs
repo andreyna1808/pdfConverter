@@ -2,6 +2,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PdfConverterAPI.Models.Responses;
 using PdfConverterAPI.Services;
 
 namespace PdfConverterAPI.Controllers
@@ -27,7 +28,7 @@ namespace PdfConverterAPI.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Nenhum arquivo enviado.");
+                return BadRequest(new ErrorResponse(400, "Nenhum arquivo enviado."));
             }
 
             using var memoryStream = new MemoryStream();

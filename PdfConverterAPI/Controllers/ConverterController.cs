@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PdfConverterAPI.Models.Responses;
 using PdfConverterAPI.Services;
 
 namespace PdfConverterAPI.Controllers
@@ -19,7 +20,7 @@ namespace PdfConverterAPI.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Nenhuma imagem foi enviada.");
+                return BadRequest(new ErrorResponse(400, "Nenhuma imagem foi enviada."));
             }
 
             using (var memoryStream = new MemoryStream())

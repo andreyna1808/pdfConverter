@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PdfConverterAPI.Models;
+using PdfConverterAPI.Models.Responses;
 using PdfConverterAPI.Services;
 
 namespace PdfConverterAPI.Controllers
@@ -24,7 +25,7 @@ namespace PdfConverterAPI.Controllers
         public async Task<IActionResult> ExtractData([FromForm] IFormFile file)
         {
             if (file == null)
-                return BadRequest("É necessário enviar um arquivo PDF.");
+                return BadRequest(new ErrorResponse(400, "É necessário enviar um arquivo PDF."));
 
             var extractedData = await _extractionService.ProcessFiles(file);
             return Ok(extractedData);
@@ -38,18 +39,22 @@ namespace PdfConverterAPI.Controllers
         {
             if (file == null)
             {
-                return BadRequest("Envie pelo menos UM arquivo PDF.");
+                return BadRequest(new ErrorResponse(400, "Envie pelo menos UM arquivo PDF."));
             }
 
             if (string.IsNullOrEmpty(requestJson))
-                return BadRequest("Os critérios de classificação são obrigatórios.");
+                return BadRequest(
+                    new ErrorResponse(400, "Os critérios de classificação são obrigatórios.")
+                );
 
             var request = System.Text.Json.JsonSerializer.Deserialize<ClassificationCriteriaModel>(
                 requestJson
             );
 
             if (request == null)
-                return BadRequest("Erro ao interpretar os critérios de classificação.");
+                return BadRequest(
+                    new ErrorResponse(400, "Erro ao interpretar os critérios de classificação.")
+                );
 
             var classification = await _classificationService.ProcessFiles(file, request);
             return Ok(classification);

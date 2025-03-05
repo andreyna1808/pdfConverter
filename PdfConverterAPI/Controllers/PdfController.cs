@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PdfConverterAPI.Models.Responses;
 using PdfConverterAPI.Services;
 
 namespace PdfConverterAPI.Controllers
@@ -28,7 +29,7 @@ namespace PdfConverterAPI.Controllers
         public async Task<IActionResult> MergePdfs([FromForm] List<IFormFile> file)
         {
             if (file == null || file.Count < 2)
-                return BadRequest("Envie pelo menos dois arquivos PDF.");
+                return BadRequest(new ErrorResponse(400, "Envie pelo menos dois arquivos PDF."));
 
             var pdfBytesList = new List<byte[]>();
 
@@ -50,7 +51,12 @@ namespace PdfConverterAPI.Controllers
         public IActionResult RemovePages([FromForm] IFormFile file, [FromForm] List<int> pages)
         {
             if (file == null || pages == null || pages.Count == 0)
-                return BadRequest("Envie um arquivo PDF e pelo menos uma página para remover.");
+                return BadRequest(
+                    new ErrorResponse(
+                        400,
+                        "Envie um arquivo PDF e pelo menos uma página para remover."
+                    )
+                );
 
             using (var memoryStream = new MemoryStream())
             {
@@ -65,7 +71,7 @@ namespace PdfConverterAPI.Controllers
         public IActionResult CompressPdf(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return BadRequest("Arquivo inválido.");
+                return BadRequest(new ErrorResponse(400, "Arquivo inválido."));
 
             using (var memoryStream = new MemoryStream())
             {
@@ -80,7 +86,7 @@ namespace PdfConverterAPI.Controllers
         public IActionResult ConvertPdfToJpg(IFormFile file)
         {
             if (file == null || file.Length == 0)
-                return BadRequest("Arquivo inválido.");
+                return BadRequest(new ErrorResponse(400, "Arquivo inválido."));
 
             using (var memoryStream = new MemoryStream())
             {
@@ -116,7 +122,7 @@ namespace PdfConverterAPI.Controllers
         {
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Nenhum arquivo foi enviado.");
+                return BadRequest(new ErrorResponse(400, "Nenhum arquivo foi enviado."));
             }
 
             using (var memoryStream = new MemoryStream())
