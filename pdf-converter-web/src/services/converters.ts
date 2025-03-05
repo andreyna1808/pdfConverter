@@ -22,9 +22,11 @@ export const ConverterService = async (
     const blob = new Blob([response.data], { type: "application/pdf" });
     const url = window.URL.createObjectURL(blob);
 
+    const getTypeFile = response.data?.type?.split("/")[1];
+
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "ConverterPleaseChangeTheName.pdf");
+    link.setAttribute("download", `ConverterPleaseChangeTheName.${getTypeFile}`);
     document.body.appendChild(link);
     link.click();
 
