@@ -1,18 +1,9 @@
-import { Helmet } from "react-helmet";
 import * as Elements from "./styles";
 import Layout from "../../components/Layout";
 
 const About = () => {
   return (
     <Layout>
-      <Helmet>
-        <meta
-          name="description"
-          content="Sobre Andreyna Carvalho e o motivo do desenvolvimento do projeto."
-        />
-        <title>Sobre o projeto</title>
-      </Helmet>
-
       <Elements.Container>
         <Elements.Title>Sobre o Projeto</Elements.Title>
         <Elements.Description>
