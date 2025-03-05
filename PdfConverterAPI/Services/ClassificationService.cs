@@ -26,9 +26,6 @@ namespace PdfConverterAPI.Services
                 string normalizedHeader = NormalizeText(header);
                 string normalizedProfession = NormalizeText(request.Profession);
 
-                Console.WriteLine("normalizedHeader", normalizedHeader);
-                Console.WriteLine("normalizedProfession", normalizedProfession);
-
                 if (!normalizedHeader.Contains(normalizedProfession))
                 {
                     continue;
