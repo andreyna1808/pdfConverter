@@ -22,13 +22,10 @@ const Navbar = () => {
             <NavLink to="/" className="nav-item">
               Página Inicial
             </NavLink>
-            <NavLink to="/pdfs" className="nav-item">
-              Converter PDF
-            </NavLink>
-            <NavLink to="/abnt-format" className="nav-item">
+            <NavLink to="/format/abnt" className="nav-item">
               Formatar nas normas da ABNT
             </NavLink>
-            <NavLink to="/classifications" className="nav-item">
+            <NavLink to="/classification/get-result" className="nav-item">
               Classificação da prova
             </NavLink>
             <NavLink to="/about" className="nav-item">
@@ -50,13 +47,10 @@ const Navbar = () => {
               <NavLink to="/" className="mobile-item">
                 Página Inicial
               </NavLink>
-              <NavLink to="/pdfs" className="mobile-item">
-                Converter PDF
-              </NavLink>
-              <NavLink to="/abnt-format" className="mobile-item">
+              <NavLink to="/format/abnt" className="mobile-item">
                 Formatar nas normas da ABNT
               </NavLink>
-              <NavLink to="/classifications" className="mobile-item">
+              <NavLink to="/classification/get-result" className="mobile-item">
                 Classificação da prova
               </NavLink>
               <NavLink to="/about" className="mobile-item">
