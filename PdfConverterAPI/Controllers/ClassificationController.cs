@@ -21,22 +21,22 @@ namespace PdfConverterAPI.Controllers
         }
 
         [HttpPost("extract-data")]
-        public async Task<IActionResult> ExtractData([FromForm] IFormFile files)
+        public async Task<IActionResult> ExtractData([FromForm] IFormFile file)
         {
-            if (files == null)
+            if (file == null)
                 return BadRequest("É necessário enviar um arquivo PDF.");
 
-            var extractedData = await _extractionService.ProcessFiles(files);
+            var extractedData = await _extractionService.ProcessFiles(file);
             return Ok(extractedData);
         }
 
         [HttpPost("get-result")]
         public async Task<IActionResult> UploadPdf(
-            [FromForm] IFormFile files,
+            [FromForm] IFormFile file,
             [FromForm] string requestJson
         )
         {
-            if (files == null)
+            if (file == null)
             {
                 return BadRequest("Envie pelo menos UM arquivo PDF.");
             }
@@ -51,7 +51,7 @@ namespace PdfConverterAPI.Controllers
             if (request == null)
                 return BadRequest("Erro ao interpretar os critérios de classificação.");
 
-            var classification = await _classificationService.ProcessFiles(files, request);
+            var classification = await _classificationService.ProcessFiles(file, request);
             return Ok(classification);
         }
     }

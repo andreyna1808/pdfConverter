@@ -25,18 +25,18 @@ namespace PdfConverterAPI.Controllers
         }
 
         [HttpPost("merge")]
-        public async Task<IActionResult> MergePdfs([FromForm] List<IFormFile> files)
+        public async Task<IActionResult> MergePdfs([FromForm] List<IFormFile> file)
         {
-            if (files == null || files.Count < 2)
+            if (file == null || file.Count < 2)
                 return BadRequest("Envie pelo menos dois arquivos PDF.");
 
             var pdfBytesList = new List<byte[]>();
 
-            foreach (var file in files)
+            foreach (var f in file)
             {
                 using (var memoryStream = new MemoryStream())
                 {
-                    await file.CopyToAsync(memoryStream);
+                    await f.CopyToAsync(memoryStream);
                     pdfBytesList.Add(memoryStream.ToArray());
                 }
             }
