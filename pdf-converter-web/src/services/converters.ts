@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import { IDataInfo } from "../interfaces/IConverters";
 
@@ -36,6 +38,15 @@ export const ConverterService = async (
 
     return response.data;
   } catch (error) {
-    console.error("Erro ao enviar dados:", error);
+    try {
+      await axios.post(`${BASE_URL}/${dataInformation.urlReq}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        responseType: "json",
+      });
+    } catch (err: any) {
+      return err?.response?.data?.message || "Erro desconhecido";
+    }
   }
 };

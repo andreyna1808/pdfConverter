@@ -14,7 +14,7 @@ export const ToastContainerStyled = styled.div`
   }
 
   .Toastify__toast--error {
-    background-color: #ff4d4d;
+    background-color: #c43030;
     color: ${({ theme }) => theme.colors.white};
   }
 `;

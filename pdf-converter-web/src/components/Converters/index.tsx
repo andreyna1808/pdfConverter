@@ -10,7 +10,7 @@ import {
   HiddenInput,
   PrimaryButton,
 } from "../../styles/defaultStyles";
-import { showErrorToast, showSuccessToast } from "../Toast";
+import { showErrorToast } from "../Toast";
 import {
   ICurrentInfo,
   IDataInfo,
@@ -65,10 +65,11 @@ const Converters = () => {
     const formData = formatDocToSend(dataInformation);
     const sendDoc = await ConverterService(formData, dataInformation);
 
-    // console.log("dataInformation: ", { dataInformation, formData, sendDoc });
+    if (typeof sendDoc == "string") {
+      return showErrorToast(sendDoc);
+    }
 
     return sendDoc;
-    // showSuccessToast('Dale');
   };
 
   return (
@@ -127,7 +128,7 @@ const Converters = () => {
             )}
             {type === "files" && (
               <>
-                {selectedFiles?.["files"]?.map(
+                {selectedFiles?.["file"]?.map(
                   ({ name }: { name: string }, index: number) => (
                     <Elements.DivFiles key={`${name}-${index}`}>
                       <Elements.FileName>{name}</Elements.FileName>
@@ -140,10 +141,10 @@ const Converters = () => {
                 )}
 
                 <Elements.FileInfo>
-                  {(!selectedFiles?.["files"]?.length ||
-                    selectedFiles?.["files"]?.length < 5) && (
+                  {(!selectedFiles?.["file"]?.length ||
+                    selectedFiles?.["file"]?.length < 5) && (
                     <FileInputWrapper>
-                      {!selectedFiles?.["files"]?.length
+                      {!selectedFiles?.["file"]?.length
                         ? "Selecione um arquivo"
                         : "Adicionar outro arquivo"}
                       <HiddenInput
