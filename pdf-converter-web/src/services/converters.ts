@@ -23,10 +23,11 @@ export const ConverterService = async (
     const url = window.URL.createObjectURL(blob);
 
     const getTypeFile = response.data?.type?.split("/")[1];
+    const typeFile = getTypeFile?.includes("document") ? "docx" : getTypeFile;
 
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", `ConverterPleaseChangeTheName.${getTypeFile}`);
+    link.setAttribute("download", `ConverterPleaseChangeTheName.${typeFile}`);
     document.body.appendChild(link);
     link.click();
 
