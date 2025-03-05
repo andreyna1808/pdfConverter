@@ -2,7 +2,7 @@ export const AvailableServices = [
   {
     name: "Merge PDF",
     description:
-      "Combine vários arquivos PDF em um único documento mantendo a ordem original.",
+      "Combine até 5 arquivos PDF em um único documento mantendo a ordem original.",
     urlReq: "pdf/merge",
   },
   {
