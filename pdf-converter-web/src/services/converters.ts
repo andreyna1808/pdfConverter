@@ -5,7 +5,7 @@ import { IDataInfo } from "../interfaces/IConverters";
 
 const BASE_URL = import.meta.env.VITE_BACK_END;
 
-export const ConverterService = async (
+export const converterService = async (
   formData: FormData,
   dataInformation: IDataInfo
 ) => {
@@ -48,5 +48,24 @@ export const ConverterService = async (
     } catch (err: any) {
       return err?.response?.data?.message || "Erro desconhecido";
     }
+  }
+};
+
+export const getClassificatioService = async (formData: FormData) => {
+  try {
+    const response = await axios.post(
+      `${BASE_URL}/classification/extract-data`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        responseType: "json",
+      }
+    );
+    
+    return response.data?.[0];
+  } catch (error: any) {
+    return error?.response?.data?.message || "Erro desconhecido";
   }
 };
