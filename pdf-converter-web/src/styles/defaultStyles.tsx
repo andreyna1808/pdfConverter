@@ -18,27 +18,6 @@ export const PrimaryButton = styled.button`
   }
 `;
 
-export const FileInputWrapper = styled.label`
-  display: flex;
-  width: 180px;
-  justify-content: center;
-  padding: 10px;
-  background-color: #5a5c5a;
-  border-radius: 5px;
-  cursor: pointer;
-  position: absolute;
-  z-index: 2;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.lightPurple};
-    transition: 0.3s;
-  }
-`;
-
-export const HiddenInput = styled.input`
-  display: none;
-`;
-
 export const CloseIcon = styled(IoMdClose)`
   cursor: pointer;
   

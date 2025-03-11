@@ -4,12 +4,7 @@ import Layout from "../Layout";
 import { AvailableServices } from "../../utils/availableServices";
 import { getFormatRequest } from "../../utils/formatFiles";
 import { useState } from "react";
-import {
-  CloseIcon,
-  FileInputWrapper,
-  HiddenInput,
-  PrimaryButton,
-} from "../../styles/defaultStyles";
+import { CloseIcon, PrimaryButton } from "../../styles/defaultStyles";
 import { showErrorToast } from "../Toast";
 import {
   ICurrentInfo,
@@ -17,7 +12,7 @@ import {
   ITypeRequest,
 } from "../../interfaces/IConverters";
 import { formatDocToSend, hasErrorMsg } from "./validations";
-import { ConverterService } from "../../services/converters";
+import { converterService } from "../../services/converters";
 
 const Converters = () => {
   const [selectedFiles, setSelectedFiles] = useState<any>(null);
@@ -69,7 +64,7 @@ const Converters = () => {
     }
 
     const formData = formatDocToSend(dataInformation);
-    const sendDoc = await ConverterService(formData, dataInformation);
+    const sendDoc = await converterService(formData, dataInformation);
 
     if (typeof sendDoc == "string") {
       return showErrorToast(sendDoc);
@@ -116,16 +111,16 @@ const Converters = () => {
                 )}
 
                 <Elements.FileInfo>
-                  <FileInputWrapper>
+                  <Elements.FileInputWrapper>
                     {selectedFiles?.["file"]?.[0]?.name
                       ? "Outro arquivo"
                       : "Selecione um arquivo"}
-                    <HiddenInput
+                    <Elements.HiddenInput
                       type="file"
                       accept={typeRequest.type}
                       onChange={(e) => handleFileChange(e, "file")}
                     />
-                  </FileInputWrapper>
+                  </Elements.FileInputWrapper>
                 </Elements.FileInfo>
               </>
             )}
@@ -146,16 +141,16 @@ const Converters = () => {
                 <Elements.FileInfo>
                   {(!selectedFiles?.["file"]?.length ||
                     selectedFiles?.["file"]?.length < 5) && (
-                    <FileInputWrapper>
+                    <Elements.FileInputWrapper>
                       {!selectedFiles?.["file"]?.length
                         ? "Selecione um arquivo"
                         : "Adicionar outro arquivo"}
-                      <HiddenInput
+                      <Elements.HiddenInput
                         type="file"
                         accept={typeRequest.type}
                         onChange={(e) => handleFileChange(e, "files")}
                       />
-                    </FileInputWrapper>
+                    </Elements.FileInputWrapper>
                   )}
                 </Elements.FileInfo>
               </>
