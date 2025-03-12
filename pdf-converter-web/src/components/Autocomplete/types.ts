@@ -9,4 +9,5 @@ export interface IAutoCompleteProps {
   options: IOption[];
   onChange: (selectedOption: any) => void;
   width?: string;
+  placeholder?: string;
 }
