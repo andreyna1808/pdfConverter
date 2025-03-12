@@ -36,22 +36,14 @@ export const ContainerServices = styled.div`
 
 export const DivFiles = styled.div`
   display: flex;
-  width: 600px;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   margin: 10px 0px;
-
-  @media (max-width: 700px) {
-    width: 320px;
-  }
 `;
 
 export const FileInfo = styled.div`
-  width: 600px;
-
-  @media (max-width: 700px) {
-    width: 320px;
-  }
+  width: 100%;
 `;
 
 export const FileName = styled.p`
@@ -64,14 +56,11 @@ export const FileName = styled.p`
 `;
 
 export const InputWrapper = styled.div`
-  width: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
 
-  @media (max-width: 700px) {
-    width: 320px;
-  }
 `;
 
 export const Label = styled.label`
@@ -91,16 +80,12 @@ export const StyledInput = styled.input`
 `;
 
 export const DivSaveButton = styled.div`
-  width: 600px;
+  width: 90%;
   display: flex;
   justify-content: flex-end;
   position: absolute;
   bottom: -20px;
   z-index: 1;
-
-  @media (max-width: 700px) {
-    width: 320px;
-  }
 `;
 
 export const FileInputWrapper = styled.label`

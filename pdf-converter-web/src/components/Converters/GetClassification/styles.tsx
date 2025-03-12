@@ -35,17 +35,16 @@ export const ContainerServices = styled.div`
 
 export const DivFiles = styled.div`
   display: flex;
-  width: 600px;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   margin: 10px 0px;
-
-  @media (max-width: 700px) {
-    width: 320px;
-  }
 `;
 
-export const FileInfo = styled.div``;
+export const FileInfo = styled.div`
+  margin-bottom: 10px;
+  width: 100%;
+`;
 
 export const FileName = styled.p`
   margin: 0px;
@@ -57,7 +56,7 @@ export const FileName = styled.p`
 `;
 
 export const InputWrapper = styled.div`
-  width: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -107,10 +106,47 @@ export const DivSaveButton = styled.div`
   width: 600px;
   display: flex;
   justify-content: flex-end;
-  bottom: -20px;
-  z-index: 1;
 
   @media (max-width: 700px) {
     width: 320px;
   }
+`;
+
+export const DivInputs = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const InputNumber = styled.input`
+  width: 100%;
+  padding: 8px;
+  border: 1px solid ${(props) => props.theme.colors.lightPurple};
+  border-radius: 4px;
+  background: ${(props) => props.theme.colors.secondary};
+  color: ${(props) => props.theme.colors.primary};
+  font-family: ${(props) => props.theme.fonts.body};
+  font-size: 16px;
+  outline: none;
+  margin: 5px 0px;
+
+  &:focus {
+    border-color: ${(props) => props.theme.colors.darkPurple};
+  }
+`;
+
+export const InputCheckbox = styled.input.attrs({ type: "checkbox" })`
+  width: 18px;
+  height: 18px;
+  accent-color: ${(props) => props.theme.colors.lightPurple};
+  cursor: pointer;
+`;
+
+export const CheckboxContainer = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
 `;
