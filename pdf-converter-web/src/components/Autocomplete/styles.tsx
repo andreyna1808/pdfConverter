@@ -11,11 +11,15 @@ export const StyledSelect = styled(Select)<IAutoCompleteProps>`
     font-family: ${(props) => props.theme.fonts.body};
     transition: border-color 0.3s;
     padding: 2px;
-    cursor: pointer;
+    cursor: text;
     margin: 5px 0px;
 
     &:hover {
       border-color: ${(props) => props.theme.colors.darkPurple};
+    }
+
+    &:focus {
+      outline: none;
     }
   }
 
@@ -23,14 +27,15 @@ export const StyledSelect = styled(Select)<IAutoCompleteProps>`
     width: ${(props) => props.width || "300px"};
     background: ${(props) => props.theme.colors.background};
     cursor: pointer;
+    border: solid 1px #474749;
 
-    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-width: thin;
     scrollbar-color: ${(props) => props.theme.colors.lightPurple} transparent;
   }
 
   .react-select__menu-list {
     &::-webkit-scrollbar {
-      width: 6px; /* Largura da barra de rolagem */
+      width: 6px;
     }
 
     &::-webkit-scrollbar-track {
@@ -39,7 +44,7 @@ export const StyledSelect = styled(Select)<IAutoCompleteProps>`
 
     &::-webkit-scrollbar-thumb {
       background: ${(props) => props.theme.colors.lightPurple};
-      border-radius: 4px; /* Borda arredondada */
+      border-radius: 4px; 
     }
 
     &::-webkit-scrollbar-thumb:hover {

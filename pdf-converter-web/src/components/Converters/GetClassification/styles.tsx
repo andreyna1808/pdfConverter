@@ -120,19 +120,22 @@ export const DivInputs = styled.div`
 `;
 
 export const InputNumber = styled.input`
-  width: 100%;
-  padding: 8px;
+  width: 97%;
+  background: ${(props) => props.theme.colors.secondary};
   border: 1px solid ${(props) => props.theme.colors.lightPurple};
   border-radius: 4px;
-  background: ${(props) => props.theme.colors.secondary};
-  color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fonts.body};
-  font-size: 16px;
-  outline: none;
+  transition: border-color 0.3s;
+  padding: 12px;
+  cursor: text;
   margin: 5px 0px;
 
-  &:focus {
+  &:hover {
     border-color: ${(props) => props.theme.colors.darkPurple};
+  }
+
+  &:focus {
+    outline: none;
   }
 `;
 
@@ -148,5 +151,4 @@ export const CheckboxContainer = styled.label`
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  cursor: pointer;
 `;
