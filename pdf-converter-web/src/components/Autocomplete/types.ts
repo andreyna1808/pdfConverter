@@ -10,4 +10,5 @@ export interface IAutoCompleteProps {
   onChange: (selectedOption: any) => void;
   width?: string;
   placeholder?: string;
+  required?: boolean;
 }
