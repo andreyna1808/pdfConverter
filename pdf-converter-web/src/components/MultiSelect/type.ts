@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export interface IOption {
-  value: string;
+  value: string | number;
   label: string;
 }
 
