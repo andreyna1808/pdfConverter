@@ -324,7 +324,8 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
             disabled={
               !requestJson?.Profession ||
               !requestJson.Values?.length ||
-              !requestJson.BasisAssessment
+              !requestJson.BasisAssessment ||
+              !requestJson.FullScore
             }
           >
             Enviar

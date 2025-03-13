@@ -122,7 +122,7 @@ export const DivInputs = styled.div`
 `;
 
 export const DivProfession = styled.div`
-  width: 83%;
+  width: 85%;
 `;
 
 export const InputNumber = styled.input`
