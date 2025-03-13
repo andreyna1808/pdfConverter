@@ -28,6 +28,8 @@ export const colsClassifications = (rows: RowData[]): GridColDef[] => {
       align: "left",
       width: 100,
       filterable: false,
+      sortable: false,
+      disableColumnMenu: true,
       renderCell: (params) => {
         const row = params?.row as RowData;
         const scoreValue = row?.scores?.[scoreKey] ?? "-";
