@@ -163,8 +163,6 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
     );
   }
 
-  console.log(extractData);
-
   return (
     <>
       <Elements.Container>
@@ -226,7 +224,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                     }
                     value={requestJson?.Values}
                     placeholder="Conteúdos"
-                    width="510px"
+                    width="100%"
                     required
                   />
                   {!requestJson?.Values && (
@@ -250,7 +248,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                       label: requestJson?.BasisAssessment,
                     }}
                     placeholder="Nome do Resultado"
-                    width="510px"
+                    width="100%"
                     required
                   />
                   {!requestJson?.BasisAssessment && (
@@ -275,37 +273,45 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                   )}
                 </Elements.DivRequired>
 
-                <Elements.InputNumber
-                  type="number"
-                  placeholder="Mínimo % para passar"
-                  min={0}
-                  onChange={(e) => numberChange(e, "ElimitedByPercent")}
-                  value={requestJson?.ElimitedByPercent || ""}
-                />
-                <MultiSelect
-                  options={options}
-                  onChange={onCriteriaChange}
-                  placeholder="Critério de desempate"
-                  width="510px"
-                  value={Object.values(
-                    requestJson?.TiebreakerCriterion || {}
-                  ).map((value) => ({
-                    label: value,
-                    value: value,
-                  }))}
-                />
-                <Elements.CheckboxContainer>
-                  <Elements.InputCheckbox
-                    type="checkbox"
-                    onChange={(e) =>
-                      setRequestJson({
-                        ...requestJson,
-                        ZeroEliminated: e.target.checked,
-                      })
-                    }
+                <Elements.DivRequired>
+                  <Elements.InputNumber
+                    type="number"
+                    placeholder="Mínimo % para passar"
+                    min={0}
+                    onChange={(e) => numberChange(e, "ElimitedByPercent")}
+                    value={requestJson?.ElimitedByPercent || ""}
                   />
-                  Eliminado por zerar?
-                </Elements.CheckboxContainer>
+                </Elements.DivRequired>
+
+                <Elements.DivRequired>
+                  <MultiSelect
+                    options={options}
+                    onChange={onCriteriaChange}
+                    placeholder="Critério de desempate"
+                    width="100%"
+                    value={Object.values(
+                      requestJson?.TiebreakerCriterion || {}
+                    ).map((value) => ({
+                      label: value,
+                      value: value,
+                    }))}
+                  />
+                </Elements.DivRequired>
+
+                <Elements.DivRequired>
+                  <Elements.CheckboxContainer>
+                    <Elements.InputCheckbox
+                      type="checkbox"
+                      onChange={(e) =>
+                        setRequestJson({
+                          ...requestJson,
+                          ZeroEliminated: e.target.checked,
+                        })
+                      }
+                    />
+                    Eliminado por zerar?
+                  </Elements.CheckboxContainer>
+                </Elements.DivRequired>
               </Elements.DivInputs>
             )}
           </Elements.DivInputs>

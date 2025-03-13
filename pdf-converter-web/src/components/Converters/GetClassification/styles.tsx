@@ -118,15 +118,14 @@ export const DivInputs = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 8px;
+  margin: 15px 0px;
 `;
 
 export const DivProfession = styled.div`
-  width: 85%;
+  width: 80.5%;
 `;
 
 export const InputNumber = styled.input`
-  width: 488px;
   background: ${(props) => props.theme.colors.secondary};
   border: 1px solid ${(props) => props.theme.colors.lightPurple};
   border-radius: 4px;
@@ -135,7 +134,6 @@ export const InputNumber = styled.input`
   transition: border-color 0.3s;
   padding: 10px;
   cursor: text;
-  margin: 5px 0px;
   height: 20px;
 
   &:hover {
@@ -159,6 +157,7 @@ export const CheckboxContainer = styled.label`
   align-items: center;
   gap: 8px;
   font-size: 14px;
+  margin-top: 15px;
 `;
 
 export const RequiredText = styled.span`
@@ -167,8 +166,12 @@ export const RequiredText = styled.span`
 `;
 
 export const DivRequired = styled.div`
+  width: 40%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-right: 10px;
+  margin-bottom: 10px;
 `;
 
 export const DivTable = styled.div`
@@ -188,5 +191,6 @@ export const StatusContainer = styled.div<{ isEliminated: boolean }>`
   padding-left: 5px;
   border-radius: 4px;
   color: white;
-  background-color: ${({ isEliminated }) => (isEliminated ? "#8a0707" : "green")};
+  background-color: ${({ isEliminated }) =>
+    isEliminated ? "#8a0707" : "green"};
 `;
