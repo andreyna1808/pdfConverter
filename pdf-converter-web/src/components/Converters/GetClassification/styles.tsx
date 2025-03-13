@@ -176,7 +176,7 @@ export const DivRequired = styled.div`
 
 export const DivTable = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.bgWhite};
   height: 85vh;
   margin-top: 5px;
 `;

@@ -19,7 +19,7 @@ const AutoComplete: React.FC<IAutoCompleteProps> = ({
       isSearchable
       autoFocus
       required={required}
-      value={value}
+      value={value || null}
     />
   );
 };

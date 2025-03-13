@@ -10,11 +10,11 @@ export const ToastContainerStyled = styled.div`
 
   .Toastify__toast--success {
     background-color: ${({ theme }) => theme.colors.lightPurple};
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.bgWhite};
   }
 
   .Toastify__toast--error {
     background-color: ${({ theme }) => theme.colors.toastError};
-    color: ${({ theme }) => theme.colors.white};
+    color: ${({ theme }) => theme.colors.bgWhite};
   }
 `;

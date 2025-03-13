@@ -114,12 +114,19 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
   };
 
   const updateProfession = (data: any) => {
-    setRequestJson({ ...requestJson, Profession: data.value });
     const filterOptions: any =
       extractData?.find((item: any) => item.profession === data.value) || [];
     setOptions(
       filterOptions?.values.map((item: any) => ({ label: item, value: item }))
     );
+    setRequestJson({
+      ...requestJson,
+      Profession: data.value,
+      Values: filterOptions?.values.map((item: any) => ({
+        label: item,
+        value: item,
+      })),
+    });
   };
 
   const numberChange = (
@@ -202,10 +209,14 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                   placeholder="Profissão"
                   width="100%"
                   required
-                  value={{
-                    value: requestJson?.Profession,
-                    label: requestJson?.Profession,
-                  }}
+                  value={
+                    requestJson?.Profession
+                      ? {
+                          value: requestJson?.Profession,
+                          label: requestJson?.Profession,
+                        }
+                      : null
+                  }
                 />
               )}
               {!requestJson?.Profession && professions?.length > 0 && (
@@ -222,7 +233,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                     onChange={(data: any) =>
                       setRequestJson({ ...requestJson, Values: data })
                     }
-                    value={requestJson?.Values}
+                    value={requestJson?.Values || null}
                     placeholder="Conteúdos"
                     width="100%"
                     required
@@ -243,10 +254,14 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                         BasisAssessment: data.value,
                       })
                     }
-                    value={{
-                      value: requestJson?.BasisAssessment,
-                      label: requestJson?.BasisAssessment,
-                    }}
+                    value={
+                      requestJson?.BasisAssessment
+                        ? {
+                            value: requestJson?.BasisAssessment,
+                            label: requestJson?.BasisAssessment,
+                          }
+                        : null
+                    }
                     placeholder="Nome do Resultado"
                     width="100%"
                     required
@@ -287,7 +302,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                   <MultiSelect
                     options={options}
                     onChange={onCriteriaChange}
-                    placeholder="Critério de desempate"
+                    placeholder="Critério de desempate (A ordem importa!)"
                     width="100%"
                     value={Object.values(
                       requestJson?.TiebreakerCriterion || {}

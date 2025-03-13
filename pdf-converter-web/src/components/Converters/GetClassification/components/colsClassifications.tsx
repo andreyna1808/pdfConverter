@@ -4,7 +4,15 @@ import { RowData } from "../types";
 
 export const colsClassifications = (rows: RowData[]): GridColDef[] => {
   const fixedColsBeforeScores: GridColDef[] = [
-    { field: "position", headerName: "Posição", width: 100 },
+    {
+      field: "position",
+      headerName: "Posição",
+      width: 100,
+      renderCell: (params) => {
+        const row = params?.row as RowData;
+        return row?.position >= 1 ? row?.position : "-";
+      },
+    },
     { field: "name", headerName: "Nome", flex: 1 },
     {
       field: "registrationNumber",
