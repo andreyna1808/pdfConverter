@@ -11,4 +11,5 @@ export interface IAutoCompleteProps {
   width?: string;
   placeholder?: string;
   required?: boolean;
+  value?: any;
 }

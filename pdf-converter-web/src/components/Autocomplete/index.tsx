@@ -7,6 +7,7 @@ const AutoComplete: React.FC<IAutoCompleteProps> = ({
   onChange,
   width,
   required = false,
+  value,
 }) => {
   return (
     <StyledSelect
@@ -18,6 +19,7 @@ const AutoComplete: React.FC<IAutoCompleteProps> = ({
       isSearchable
       autoFocus
       required={required}
+      value={value}
     />
   );
 };

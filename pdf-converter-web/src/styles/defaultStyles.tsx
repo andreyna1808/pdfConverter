@@ -16,11 +16,17 @@ export const PrimaryButton = styled.button`
     background-color: ${(props) => props.theme.colors.darkPurple};
     transition: 0.3s;
   }
+
+  &:disabled {
+    background-color: ${(props) => props.theme.colors.darkPurple};
+    opacity: 0.5;
+    cursor: text;
+  }
 `;
 
 export const CloseIcon = styled(IoMdClose)`
   cursor: pointer;
-  
+
   &:hover {
     color: ${({ theme }) => theme.colors.lightPurple};
     transition: 0.3s;
