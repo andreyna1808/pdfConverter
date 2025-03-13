@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <Layout>
       <Elements.Container>
-        <Elements.Tittle>Ferramentas disponiveis</Elements.Tittle>
+        <Elements.Tittle>Ferramentas disponíveis</Elements.Tittle>
 
         <Elements.ContainerServices>
           {AvailableServices.map((service) => (

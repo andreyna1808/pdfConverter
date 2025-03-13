@@ -132,11 +132,9 @@ export const ToggleButton = styled.button`
   height: 25px;
   display: flex;
   align-items: center;
-  justify-content: ${({ theme }) =>
-    theme.name === "light" ? "flex-start" : "flex-end"};
   padding: 5px;
   position: relative;
-  transition: background 0.3s, justify-content 0.3s;
+  transition: background 0.5s ease-in-out;
 
   &:focus {
     outline: none;
@@ -151,5 +149,7 @@ export const ToggleIcon = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background 0.3s;
+  transition: background 0.5s ease-in-out, transform 0.5s ease-in-out;
+  transform: ${({ theme }) =>
+    theme.name === "light" ? "translateX(0px)" : "translateX(25px)"};
 `;

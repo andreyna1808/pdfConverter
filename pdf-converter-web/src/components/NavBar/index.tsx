@@ -38,7 +38,7 @@ const Navbar = () => {
           <Elements.ToggleButton onClick={themeContext?.toggleTheme}>
             <Elements.ToggleIcon>
               {themeContext?.theme?.name === "light" ? (
-                <FaSun color="#fff" />
+                <FaSun color="#ff5100" />
               ) : (
                 <FaMoon color="#000" />
               )}
