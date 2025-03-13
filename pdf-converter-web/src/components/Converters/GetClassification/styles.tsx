@@ -34,10 +34,10 @@ export const ContainerServices = styled.div`
 `;
 
 export const DivFiles = styled.div`
-  display: flex;
   width: 100%;
+  display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   margin: 10px 0px;
 `;
 
@@ -49,7 +49,7 @@ export const FileInfo = styled.div`
 export const FileName = styled.p`
   margin: 0px;
   padding: 5px;
-  width: 100%;
+  width: 30%;
   overflow: hidden;
   white-space: wrap;
   text-overflow: ellipsis;
