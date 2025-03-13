@@ -158,6 +158,8 @@ export const CheckboxContainer = styled.label`
   gap: 8px;
   font-size: 14px;
   margin-top: 15px;
+  align-items: flex-end;
+  height: 40px;
 `;
 
 export const RequiredText = styled.span`
@@ -171,7 +173,7 @@ export const DivRequired = styled.div`
   flex-direction: column;
   justify-content: space-between;
   padding-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 export const DivTable = styled.div`

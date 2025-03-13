@@ -32,13 +32,13 @@ export const AvailableServices = [
   {
     name: "JPG to PDF",
     description:
-      "Converta múltiplas imagens JPG em um único arquivo PDF com layout ajustável.",
+      "Converta imagens JPG em um único arquivo PDF com layout ajustável.",
     urlReq: "converter/img-to-pdf",
   },
   {
     name: "Formatar Word ABNT",
     description:
-      "Aplique automaticamente as normas da ABNT ao seu documento no Word.",
+      "Aplique automaticamente as normas da ABNT ao seu documento no Word. OBS.: Por ser uma ferramenta gratuita, virá com marca d'agua, mas é possível remover na edição.",
     urlReq: "format/abnt",
   },
   {

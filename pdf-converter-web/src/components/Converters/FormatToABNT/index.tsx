@@ -108,6 +108,7 @@ const FormatToABNT = () => {
           </Elements.FileInfo>
           <Elements.DivInputs>
             <Elements.DivRequired>
+              <label>Fonte</label>
               <AutoComplete
                 options={Fonts}
                 onChange={(data: any) =>
@@ -122,6 +123,7 @@ const FormatToABNT = () => {
               />
             </Elements.DivRequired>
             <Elements.DivRequired>
+              <label>Tamanho da Fonte</label>
               <AutoComplete
                 options={FontSize}
                 onChange={(data: any) =>
@@ -136,6 +138,7 @@ const FormatToABNT = () => {
               />
             </Elements.DivRequired>
             <Elements.DivRequired>
+              <label>Espaçamento</label>
               <AutoComplete
                 options={Spacing}
                 onChange={(data: any) =>

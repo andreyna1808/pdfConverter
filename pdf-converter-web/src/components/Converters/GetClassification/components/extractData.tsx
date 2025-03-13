@@ -122,6 +122,8 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
     setRequestJson({
       ...requestJson,
       Profession: data.value,
+      BasisAssessment:
+        filterOptions?.values?.[filterOptions?.values?.length - 1],
       Values: filterOptions?.values.map((item: any) => ({
         label: item,
         value: item,
@@ -203,21 +205,25 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
           <Elements.DivInputs>
             <Elements.DivProfession>
               {professions?.length > 0 && (
-                <AutoComplete
-                  options={professions}
-                  onChange={(data: any) => updateProfession(data)}
-                  placeholder="Profissão"
-                  width="100%"
-                  required
-                  value={
-                    requestJson?.Profession
-                      ? {
-                          value: requestJson?.Profession,
-                          label: requestJson?.Profession,
-                        }
-                      : null
-                  }
-                />
+                <>
+                  <label>Profissão/Cargo: </label>
+
+                  <AutoComplete
+                    options={professions}
+                    onChange={(data: any) => updateProfession(data)}
+                    placeholder="Ex.: Professor licenciatura em pedagogia"
+                    width="100%"
+                    required
+                    value={
+                      requestJson?.Profession
+                        ? {
+                            value: requestJson?.Profession,
+                            label: requestJson?.Profession,
+                          }
+                        : null
+                    }
+                  />
+                </>
               )}
               {!requestJson?.Profession && professions?.length > 0 && (
                 <Elements.RequiredText>
@@ -228,13 +234,14 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
             {requestJson && requestJson?.Profession && (
               <Elements.DivInputs>
                 <Elements.DivRequired>
+                  <label>Conteúdos da tabela:</label>
                   <MultiSelect
                     options={options}
                     onChange={(data: any) =>
                       setRequestJson({ ...requestJson, Values: data })
                     }
                     value={requestJson?.Values || null}
-                    placeholder="Conteúdos"
+                    placeholder="Todos que estiverem no PDF"
                     width="100%"
                     required
                   />
@@ -246,6 +253,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                 </Elements.DivRequired>
 
                 <Elements.DivRequired>
+                  <label>Nome do campo que contém o resultado final: </label>
                   <AutoComplete
                     options={options}
                     onChange={(data: any) =>
@@ -262,7 +270,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                           }
                         : null
                     }
-                    placeholder="Nome do Resultado"
+                    placeholder="Geralmente é Resultado, Pontos, etc."
                     width="100%"
                     required
                   />
@@ -274,9 +282,10 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                 </Elements.DivRequired>
 
                 <Elements.DivRequired>
+                  <label>Nota máxima da prova: </label>
                   <Elements.InputNumber
                     type="number"
-                    placeholder="Nota máxima da prova"
+                    placeholder="Geralmente é 50, 70 ou 100"
                     min={0}
                     onChange={(e) => numberChange(e, "FullScore")}
                     value={requestJson?.FullScore || ""}
@@ -289,9 +298,10 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                 </Elements.DivRequired>
 
                 <Elements.DivRequired>
+                  <label>Mínimo para não ser eliminado: </label>
                   <Elements.InputNumber
                     type="number"
-                    placeholder="Mínimo % para passar"
+                    placeholder="Ex.: 50, 70"
                     min={0}
                     onChange={(e) => numberChange(e, "ElimitedByPercent")}
                     value={requestJson?.ElimitedByPercent || ""}
@@ -299,10 +309,11 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                 </Elements.DivRequired>
 
                 <Elements.DivRequired>
+                  <label>Critério de desempate (A ordem importa!): </label>
                   <MultiSelect
                     options={options}
                     onChange={onCriteriaChange}
-                    placeholder="Critério de desempate (A ordem importa!)"
+                    placeholder="Ex.: Conhecimentos especificos, Português, etc."
                     width="100%"
                     value={Object.values(
                       requestJson?.TiebreakerCriterion || {}
