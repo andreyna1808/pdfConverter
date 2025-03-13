@@ -80,11 +80,11 @@ export const StyledInput = styled.input`
 `;
 
 export const DivSaveButton = styled.div`
-  width: 90%;
+  width: 99%;
   display: flex;
   justify-content: flex-end;
   position: absolute;
-  bottom: -20px;
+  bottom: -25px;
   z-index: 1;
 `;
 
