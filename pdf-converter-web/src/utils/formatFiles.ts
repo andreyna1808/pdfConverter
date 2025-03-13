@@ -6,7 +6,7 @@ export const getFormatRequest = (value: string) => {
       return { body: ["file"], type: ".pdf" };
     case "converter/img-to-pdf":
       return { body: ["file"], type: "image/*" };
-    case "api/format/abnt":
+    case "format/abnt":
       return { body: ["file"], type: ".doc,.docx" };
     case "pdf/merge":
       return { body: ["files"], type: ".pdf" };

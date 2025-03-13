@@ -60,12 +60,17 @@ export const LinksContainer = styled.div`
 export const Button = styled.a`
   text-decoration: none;
   padding: 10px 20px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  background-color: ${(props) => props.theme.colors.lightPurple};
   color: #fff;
   border-radius: 4px;
   font-size: 1rem;
   font-weight: bold;
   transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.darkPurple};
+    transition: 0.3s;
+  }
 `;
 
 export const ContactEmail = styled.p`
