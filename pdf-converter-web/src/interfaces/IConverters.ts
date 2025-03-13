@@ -10,10 +10,10 @@ export interface ICurrentInfo {
 }
 
 export interface IRequestJson {
-  Profession: string;
-  Values: string[];
-  BasisAssessment: string;
-  FullScore: number;
+  Profession?: string;
+  Values?: string[];
+  BasisAssessment?: string;
+  FullScore?: number;
   EliminatedByZero?: boolean;
   ElimitedByPercent?: number;
   TiebreakerCriterion?: Record<string, string>;
@@ -26,6 +26,6 @@ export interface IDataInfo extends ITypeRequest, ICurrentInfo {
 }
 
 export interface IExtractData {
-  profession: string;
+  profession: string[];
   values: string[];
 }

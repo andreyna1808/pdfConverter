@@ -64,7 +64,7 @@ export const getClassificatioService = async (formData: FormData) => {
       }
     );
     
-    return response.data?.[0];
+    return response.data;
   } catch (error: any) {
     return error?.response?.data?.message || "Erro desconhecido";
   }
