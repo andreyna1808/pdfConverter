@@ -89,7 +89,7 @@ export const FileInputWrapper = styled.label`
   width: 180px;
   justify-content: center;
   padding: 10px;
-  background-color: #5a5c5a;
+  background-color: ${({ theme }) => theme.colors.grey};
   border-radius: 5px;
   cursor: pointer;
   margin: 10px 0px;
@@ -112,7 +112,7 @@ export const DivInputs = styled.div`
 `;
 
 export const RequiredText = styled.span`
-  color: #f73434;
+  color: ${({ theme }) => theme.colors.red};
   font-size: 10px;
 `;
 

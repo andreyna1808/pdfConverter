@@ -78,7 +78,7 @@ export const FileInputWrapper = styled.label`
   width: 180px;
   justify-content: center;
   padding: 10px;
-  background-color: #5a5c5a;
+  background-color: ${({ theme }) => theme.colors.grey};
   border-radius: 5px;
   cursor: pointer;
 
@@ -161,7 +161,7 @@ export const CheckboxContainer = styled.label`
 `;
 
 export const RequiredText = styled.span`
-  color: #f73434;
+  color: ${({ theme }) => theme.colors.red};
   font-size: 10px;
 `;
 
@@ -176,7 +176,7 @@ export const DivRequired = styled.div`
 
 export const DivTable = styled.div`
   width: 100%;
-  background-color: white;
+  background-color: ${({ theme }) => theme.colors.white};
   height: 85vh;
   margin-top: 5px;
 `;
@@ -190,7 +190,7 @@ export const StatusContainer = styled.div<{ isEliminated: boolean }>`
   margin-top: 10px;
   padding-left: 5px;
   border-radius: 4px;
-  color: white;
+  color: ${({ theme }) => theme.colors.white};
   background-color: ${({ isEliminated }) =>
-    isEliminated ? "#8a0707" : "green"};
+    isEliminated ? ({ theme }) => theme.colors.red : ({ theme }) => theme.colors.green};
 `;

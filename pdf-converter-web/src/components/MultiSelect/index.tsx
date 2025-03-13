@@ -2,6 +2,12 @@
 import React from "react";
 import { IMultiSelectProps } from "./type";
 import { StyledMultiSelect } from "./styles";
+import {
+  MultiValueContainer,
+  RemoveIcon,
+  OptionContainer,
+  Checkbox,
+} from "./styles";
 
 const MultiSelect: React.FC<IMultiSelectProps> = ({
   options,
@@ -32,19 +38,10 @@ const CustomOption = (props: any) => {
   const { data, isSelected, innerRef, innerProps } = props;
 
   return (
-    <div
-      ref={innerRef}
-      {...innerProps}
-      style={{ display: "flex", alignItems: "center", padding: "8px" }}
-    >
-      <input
-        type="checkbox"
-        checked={isSelected}
-        readOnly
-        style={{ marginRight: "8px" }}
-      />
+    <OptionContainer ref={innerRef} {...innerProps}>
+      <Checkbox type="checkbox" checked={isSelected} readOnly />
       {data.label}
-    </div>
+    </OptionContainer>
   );
 };
 
@@ -52,22 +49,10 @@ const CustomMultiValue = (props: any) => {
   const { data, removeProps } = props;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        background: "#6b46c1",
-        color: "white",
-        padding: "4px",
-        borderRadius: "4px",
-        margin: "2px",
-      }}
-    >
+    <MultiValueContainer>
       {data.label}
-      <span {...removeProps} style={{ marginLeft: "8px", cursor: "pointer" }}>
-        ✖
-      </span>
-    </div>
+      <RemoveIcon {...removeProps}>✖</RemoveIcon>
+    </MultiValueContainer>
   );
 };
 

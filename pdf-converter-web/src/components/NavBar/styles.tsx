@@ -122,3 +122,34 @@ export const NavMobile = styled.nav`
   display: flex;
   flex-direction: column;
 `;
+
+export const ToggleButton = styled.button`
+  background: #5d5da0;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  width: 50px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: ${({ theme }) =>
+    theme.name === "light" ? "flex-start" : "flex-end"};
+  padding: 5px;
+  position: relative;
+  transition: background 0.3s, justify-content 0.3s;
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+export const ToggleIcon = styled.div`
+  width: 20px;
+  height: 20px;
+  background: ${({ theme }) => (theme.name === "light" ? "#FFD700" : "#fff")};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.3s;
+`;

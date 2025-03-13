@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import * as Elements from "./styles";
 import { IoMdMenu } from "react-icons/io";
+import { ThemeContext } from "../../Contexts/ThemeContext";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const themeContext = useContext(ThemeContext);
 
   return (
     <>
@@ -32,6 +35,15 @@ const Navbar = () => {
               Sobre
             </NavLink>
           </Elements.Nav>
+          <Elements.ToggleButton onClick={themeContext?.toggleTheme}>
+            <Elements.ToggleIcon>
+              {themeContext?.theme?.name === "light" ? (
+                <FaSun color="#fff" />
+              ) : (
+                <FaMoon color="#000" />
+              )}
+            </Elements.ToggleIcon>
+          </Elements.ToggleButton>
         </Elements.Container>
       </Elements.Header>
 

@@ -27,7 +27,7 @@ export const StyledSelect = styled(Select)<IAutoCompleteProps>`
     width: ${(props) => props.width || "300px"};
     background: ${(props) => props.theme.colors.background};
     cursor: pointer;
-    border: solid 1px #474749;
+    border: solid 1px ${(props) => props.theme.colors.menu};
 
     scrollbar-width: thin;
     scrollbar-color: ${(props) => props.theme.colors.lightPurple} transparent;

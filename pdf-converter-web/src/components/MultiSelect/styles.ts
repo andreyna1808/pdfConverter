@@ -27,7 +27,7 @@ export const StyledMultiSelect = styled(Select)<IMultiSelectProps>`
     width: ${(props) => props.width || "300px"};
     background: ${(props) => props.theme.colors.background};
     cursor: pointer;
-    border: solid 1px #474749;
+    border: solid 1px ${(props) => props.theme.colors.menu};
   }
 
   .react-select__option {
@@ -63,4 +63,29 @@ export const StyledMultiSelect = styled(Select)<IMultiSelectProps>`
       background: ${(props) => props.theme.colors.lightPurple};
     }
   }
+`;
+
+export const MultiValueContainer = styled.div`
+  display: flex;
+  align-items: center;
+  background: ${(props) => props.theme.colors.mediumPurple};
+  color: ${(props) => props.theme.colors.white};
+  padding: 4px;
+  border-radius: 4px;
+  margin: 2px;
+`;
+
+export const RemoveIcon = styled.span`
+  margin-left: 8px;
+  cursor: pointer;
+`;
+
+export const OptionContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 8px;
+`;
+
+export const Checkbox = styled.input`
+  margin-right: 8px;
 `;

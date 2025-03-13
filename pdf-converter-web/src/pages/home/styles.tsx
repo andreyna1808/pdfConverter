@@ -28,7 +28,7 @@ export const Service = styled.div`
   width: 400px;
   margin: 20px;
   padding: 10px;
-  background: #5a5c5a;
+  background: ${({ theme }) => theme.colors.grey};
   border-radius: 8px;
   cursor: pointer;
 

@@ -93,7 +93,7 @@ export const FileInputWrapper = styled.label`
   width: 180px;
   justify-content: center;
   padding: 10px;
-  background-color: #5a5c5a;
+  background-color: ${({ theme }) => theme.colors.grey};
   border-radius: 5px;
   cursor: pointer;
   position: absolute;
