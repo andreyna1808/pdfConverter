@@ -17,6 +17,8 @@ const GetClassification = () => {
     setClassifications(data);
   };
 
+  console.log({ classifications });
+
   return (
     <Layout>
       {!classifications ? (

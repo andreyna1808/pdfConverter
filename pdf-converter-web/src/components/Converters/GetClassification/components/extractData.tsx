@@ -331,7 +331,7 @@ const ExtractData: React.FC<any> = ({ onResult }) => {
                       onChange={(e) =>
                         setRequestJson({
                           ...requestJson,
-                          ZeroEliminated: e.target.checked,
+                          EliminatedByZero: e.target.checked,
                         })
                       }
                     />
