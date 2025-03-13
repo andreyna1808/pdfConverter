@@ -51,7 +51,7 @@ export const converterService = async (
   }
 };
 
-export const getClassificatioService = async (formData: FormData) => {
+export const getExtractData = async (formData: FormData) => {
   try {
     const response = await axios.post(
       `${BASE_URL}/classification/extract-data`,
