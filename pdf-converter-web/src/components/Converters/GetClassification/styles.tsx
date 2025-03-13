@@ -103,7 +103,8 @@ export const StyledInput = styled.input`
 `;
 
 export const DivSaveButton = styled.div`
-  width: 95%;
+  width: 99%;
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
 
@@ -135,6 +136,7 @@ export const InputNumber = styled.input`
   padding: 10px;
   cursor: text;
   margin: 5px 0px;
+  height: 20px;
 
   &:hover {
     border-color: ${(props) => props.theme.colors.darkPurple};
@@ -157,4 +159,34 @@ export const CheckboxContainer = styled.label`
   align-items: center;
   gap: 8px;
   font-size: 14px;
+`;
+
+export const RequiredText = styled.span`
+  color: #f73434;
+  font-size: 10px;
+`;
+
+export const DivRequired = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const DivTable = styled.div`
+  width: 100%;
+  background-color: white;
+  height: 85vh;
+  margin-top: 5px;
+`;
+
+export const StatusContainer = styled.div<{ isEliminated: boolean }>`
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-top: 10px;
+  padding-left: 5px;
+  border-radius: 4px;
+  color: white;
+  background-color: ${({ isEliminated }) => (isEliminated ? "#8a0707" : "green")};
 `;
