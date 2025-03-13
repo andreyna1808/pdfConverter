@@ -103,7 +103,7 @@ export const StyledInput = styled.input`
 `;
 
 export const DivSaveButton = styled.div`
-  width: 600px;
+  width: 95%;
   display: flex;
   justify-content: flex-end;
 
@@ -115,18 +115,24 @@ export const DivSaveButton = styled.div`
 export const DivInputs = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 8px;
 `;
 
+export const DivProfession = styled.div`
+  width: 83%;
+`;
+
 export const InputNumber = styled.input`
-  width: 97%;
+  width: 488px;
   background: ${(props) => props.theme.colors.secondary};
   border: 1px solid ${(props) => props.theme.colors.lightPurple};
   border-radius: 4px;
   font-family: ${(props) => props.theme.fonts.body};
+  font-size: 16px;
   transition: border-color 0.3s;
-  padding: 12px;
+  padding: 10px;
   cursor: text;
   margin: 5px 0px;
 
